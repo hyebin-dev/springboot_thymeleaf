@@ -1,0 +1,17 @@
+<!doctype html>
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout/layout}">
+<!--/* layout:decorate="~{layout 파일경로}" => layout 파일에 변경 영역 지정 */-->
+<div layout:fragment="content">
+    <h1>Ex02 page</h1>
+    [[${testVO}]]
+    [[${testVO.name}]] / [[${testVO.num}]]
+    <br />
+    <hr />
+    [[${param.name}]] / [[${param.age}]]
+
+    <!-- /ex03으로 이동하는 a 태그 생성 -->
+    <a th:href="@{/ex03}">ex03으로 이동</a>
+</div>

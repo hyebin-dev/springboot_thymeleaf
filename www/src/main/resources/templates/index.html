@@ -1,0 +1,66 @@
+<!doctype html>
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout/layout}">
+<!--/* layout:decorate="~{layout 파일경로}" => layout 파일에 변경 영역 지정 */-->
+<div layout:fragment="content">
+    <h1>Hello SpringBoot World~!!</h1>
+    <!--/*
+        ${msg} : jsp EL 표현식 덕분에 가능한 기능.
+        [[inline 방식]] => 컨트롤러에서 받은 데이터를 표시
+        th: 태그 내부에서는 ${} 사용
+        <h1>${msg}</h1> : 안되는 형태
+    */-->
+    <h1 th:text="${msg}"> 원래 있던 데이터 </h1>
+    <h1>[[${msg}]] 원래 있던 데이터</h1>
+
+    <h3>[[${list}]]</h3>
+    <h3 th:text="${list}"></h3>
+    <hr />
+    <ul>
+        <li th:each="str:${list}">[[${str}]]</li>
+    </ul>
+    <hr />
+    <ul>
+        <li th:each="str:${list}" th:text="${str}"></li>
+    </ul>
+    <hr />
+    <ul>
+        <li th:each="str, status:${list}">
+            [[${status.index}]] ----- [[${str}]]
+        </li>
+    </ul>
+    <hr />
+    <ul>
+        <li th:each="str, status:${list}">
+            <span th:if="${status.odd}"> ODD --- [[${str}]]</span>
+            <span th:unless="${status.odd}"> EVEN --- [[${str}]]</span>
+
+        </li>
+    </ul>
+<ul>
+    <li th:each="str, status:${list}">
+        <span th:text="${status.odd} ? 'odd -'+${str} : 'even - ' +${str}"></span>
+        <span>[[${status.last}]]</span>
+    </li>
+</ul>
+<hr />
+<ul>
+    <li th:each="str, status:${list}">
+        <th:block th:switch="${status.index % 3}">
+            <span th:case="0"> 0 - [[${str}]]</span>
+            <span th:case="1"> 1 - [[${str}]]</span>
+            <span th:case="2"> 2 - [[${str}]]</span>
+        </th:block>
+    </li>
+</ul>
+<hr />
+<th:block th:with="num1=${10}, num2=${20}">
+    <span>[[${num1 + num2}]]</span>
+</th:block>
+
+<!-- 링크로 연결 => controller mapping 경로로 이동-->
+<!-- th 없이 그냥 연결을 하면 일반(변수없이) 연결만 가능 -->
+<a th:href="@{/ex01}">ex01로 이동</a>
+</div>

@@ -1,0 +1,18 @@
+<!doctype html>
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout/layout}">
+<!--/* layout:decorate="~{layout 파일경로}" => layout 파일에 변경 영역 지정 */-->
+
+<div layout:fragment="content">
+    <h1>Controller에서 보낸 ex01.html 파일</h1>
+    [[${list}]]
+    <!-- th:each -->
+    <ul>
+        <li th:each="str:${list}">[[${str}]]</li>
+    </ul>
+    <!-- controller / ex02 mapping -->
+    <a href="/ex02?name=hong&age=20">ex02로 이동 - href 사용</a>
+    <a th:href="@{/ex02(name='kim', age='30')}">ex02로 이동 - th:href 사용</a>
+</div>

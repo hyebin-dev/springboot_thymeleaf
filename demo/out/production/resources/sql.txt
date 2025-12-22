@@ -1,5 +1,0 @@
-데이터 베이스명 : springdb
-user : springuser
-password : mysql
-
-기존 spring_project에서 사용 DB 그대로 사용

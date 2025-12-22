@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout/layout}">
+<!--/* layout:decorate="~{붙일 레이아웃 경로}" : 내 조각이 붙여질 위치 */-->
+<div layout:fragment="content">
+    <div class="container-sm">
+        <h3>user modify page</h3>
+        <form action="/user/modify" method="post">
+            <div class="card" style="width: 18rem;"
+                 th:with="user=${#authentication.getPrincipal().userVO}">
+                <img th:src="@{/image/cat2.jpg}" class="card-img-top" alt="...">
+                <div class="card-body">
+                    <h5 class="card-title">
+                        <input type="hidden" class="form-control" name="email" th:value="${user.email }">
+                        <input type="text" class="form-control" name="nickName" th:value="${user.nickName }">
+                        <input type="password" class="form-control" name="pwd" placeholder="password...">
+
+                    </h5>
+                    <p class="card-text fw-bold">[[${user.email }]]</p>
+                    <p class="card-text">[[${user.regDate }]]</p>
+                    <p class="card-text"><small>Last login [[${user.lastLogin }]] ago</small></p>
+
+                    <!-- 권한 -->
+                    <p class="card-text">
+                        <th:block th:each="auths: ${user.authList}">
+                            <span class="badge text-bg-success">[[${auths.auth }]]</span>
+                        </th:block>
+                    </p>
+
+                    <button type="submit" class="btn btn-primary btn-sm">modify</button>
+                    <a th:href="@{/user/remove}"><button type="button" class="btn btn-danger btn-sm">delete</button></a>
+                </div>
+            </div>
+        </form>
+
+    </div>
+</div>

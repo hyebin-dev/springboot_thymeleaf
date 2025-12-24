@@ -68,4 +68,4 @@ src/main/resources/application-prod.properties
 
 src/main/resources/application.properties
 
-/springJPA설정.txt
+springJPA설정.txt

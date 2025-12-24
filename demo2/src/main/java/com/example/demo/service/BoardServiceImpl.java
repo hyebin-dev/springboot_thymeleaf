@@ -1,0 +1,145 @@
+package com.example.demo.service;
+
+import com.example.demo.dto.BoardDTO;
+import com.example.demo.entity.Board;
+import com.example.demo.repository.BoardRepository;
+import jakarta.persistence.EntityNotFoundException;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
+import java.util.Optional;
+
+@Slf4j
+@RequiredArgsConstructor
+@Service
+public class BoardServiceImpl implements BoardService {
+    private final BoardRepository boardRepository;
+
+    @Override
+    public Long insert(BoardDTO boardDTO) {
+        // save() : 저장
+        // 저장 객체는 Entity (Board)
+        // DTO => Entity 로 변환
+        Board board = convertDtoToEntity(boardDTO); // 변환 후
+        Long bno = boardRepository.save(board).getBno(); // 저장
+        return bno;
+    }
+
+    @Override
+    public Page<BoardDTO> getList(int pageNo) {
+        // limit 시작번지, 개수 => 번지는 0부터 시작
+        // pageNo = 1 => limit 10,10 => pageNo - 1 => 0부터 인식되게 처리
+        Pageable pageable = PageRequest.of(pageNo-1, 10, Sort.by("bno").descending());
+        Page<Board> pageList = boardRepository.findAll(pageable);
+        Page<BoardDTO> boardDTOPage = pageList.map(this::convertEntityToDto);
+        return boardDTOPage;
+    }
+
+    @Override
+    public BoardDTO getDetail(long bno) {
+        /* findOne => 기본키를 이용하여 원하는 객체 검색 where ~
+        * findBy칼럼명 => 원하는 칼럼명을 이용하여 검색
+        * findById = fineOne
+        * Optional<T> : NullPointException이 발생하지 않도록 도와줌
+        * Optional.isEmpty() : null 일 경우 true / false
+        * Optional.isPresent() : 값이 있는지를 확인 true / false
+        * Optional.get() : 객체 가져오기
+        *  */
+        Optional<Board> optional = boardRepository.findById(bno);
+        if(optional.isPresent()){
+            Board board = optional.get();
+            // readCount update method call
+            boardReadCountUpdate(board, 1);
+
+            BoardDTO boardDTO = convertEntityToDto(board);
+            return boardDTO;
+        }
+        return null;
+    }
+
+    /*
+     * save() => id가 없으면 insert / id가 있으면 update
+     * EntityNotFoundException : where 값이 존재하지 않을 경우 발생
+     * 정보 유실 가능성이 커짐
+     * dirty checking 미작동 가능성이 커짐
+     *
+     * 변동감지(dirty checking)
+     * findById(bno)를 통해 먼저 조회 => 영속상태를 만든 후 수정 => save()
+     * @Transactional => dirty checking만으로 업데이트가 가능 / save() 없이도 업데이트가 가능
+     *
+     * dirty checking (더티 체킹) = 변동감지
+     * 엔티티가 영속성 컨텍스트에 올라가 있는 상태 (=영속상태) 일 때,
+     * 해당 객체의 필드가 변경되면, 트랜젝션이 종료되기 전에 JPA가
+     * 변경한 부분만 자동 감지하여 update 쿼리를 실행.
+     * save()가 없어도 (명시적으로 호출하지 않아도) 수정된 필드를 DB에 자동 반영
+     * */
+
+    @Transactional
+    @Override
+    public Long modify(BoardDTO boardDTO) {
+        /* optional.orElseThrow(() -> new EntityNotFoundException("존재하지 않는 게시글"))
+        */
+        Board board = boardRepository.findById(boardDTO.getBno())
+                .orElseThrow(()-> new EntityNotFoundException("존재하지 않는 게시글"));
+        board.setTitle(boardDTO.getTitle());
+        board.setContent(boardDTO.getContent());
+
+        boardReadCountUpdate(board, -1);
+
+        return boardDTO.getBno();
+    }
+
+    @Override
+    public void remove(long bno) {
+        /* deleteById(bno) */
+        boardRepository.deleteById(bno);
+    }
+
+    private void boardReadCountUpdate(Board board, int i){
+        // readCount update method
+        board.setReadCount(board.getReadCount()+i);
+        boardRepository.save(board);
+    }
+
+
+//    @Override
+//    public Long modify(BoardDTO boardDTO) {
+//        // update 기능은 없음.
+//        // findById 객체를 가져와서 => 내 객체에서 변경값만 수정 => save()
+//        Optional<Board> optional = boardRepository.findById(boardDTO.getBno());
+//        if(optional.isPresent()){
+//            Board board = optional.get();
+//            board.setTitle(boardDTO.getTitle());
+//            board.setContent(boardDTO.getContent());
+//            boardRepository.save(board);
+//            boardReadCountUpdate(board, -1);
+//            return board.getBno();
+//        }
+//        return 0L;
+//    }
+
+//    @Override
+//    public Page<BoardDTO> getList(int pageNo) {
+//        /* DB에서 가져오는 return List<Board> => List<BoardDTO>로 변환
+//        * findAll() => 전체 값 리턴
+//        * select * from board order by bno desc
+//        * 정렬 : Sort.by(Sort.direction.DESC, "정렬 기준 칼럼명")
+//        * */
+//        List<Board> boardList = boardRepository.findAll(
+//                Sort.by(Sort.Direction.DESC, "bno"));
+//
+//        List<BoardDTO> boardDTOList = boardList
+//                .stream()
+//                .map(board -> convertEntityToDto(board))
+//                .toList();
+//
+//        return boardDTOList;
+//    }
+}

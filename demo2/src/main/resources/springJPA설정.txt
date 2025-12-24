@@ -1,0 +1,26 @@
+DB 설정
+- DB : bootdb
+- user : springuser
+- password : mysql
+
+1. bootdb 생성
+create database bootdb;
+
+2. 유저에게 권한 부여
+grant all privileges on
+bootdb.* to
+'springuser'@'localhost';
+flush privileges;
+
+-----------------------------------------
+controller
+service
+repository => BoardRepository (interface)
+dto => 옛날 domain
+entity => 테이블 mapping용 객체
+
+------------------------------------------
+thumbnailator: 0.4.20 -> 추가
+
+application.properties
+fileupload 설정 추가

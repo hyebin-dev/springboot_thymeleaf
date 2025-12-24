@@ -1,0 +1,71 @@
+### Gradle / Build
+.gradle/
+build/
+out/
+!gradle/wrapper/gradle-wrapper.jar
+!**/src/main/**/build/
+!**/src/test/**/build/
+!**/src/main/**/out/
+!**/src/test/**/out/
+
+### Generated sources
+src/main/generated/
+
+### STS / Eclipse
+.apt_generated
+.classpath
+.factorypath
+.project
+.settings
+.springBeans
+.sts4-cache
+bin/
+!**/src/main/**/bin/
+!**/src/test/**/bin/
+
+### IntelliJ IDEA
+.idea/
+*.iws
+*.iml
+*.ipr
+
+### NetBeans
+/nbproject/private/
+/nbbuild/
+/dist/
+/nbdist/
+/.nb-gradle/
+
+### VS Code
+.vscode/
+
+### Logs
+*.log
+logs/
+
+### Local DB files
+*.mv.db
+*.h2.db
+*.trace.db
+
+### OS / Editor temp
+.DS_Store
+Thumbs.db
+*~
+*.swp
+*.swo
+hs_err_pid*.log
+
+### Local config / secrets
+.env
+.env.*
+!.env.example
+
+# Spring Boot 로컬/개발/운영 분리 파일
+src/main/resources/application-local.properties
+src/main/resources/application-dev.properties
+src/main/resources/application-prod.properties
+
+src/main/resources/application.properties
+
+/springJPA설정.txt

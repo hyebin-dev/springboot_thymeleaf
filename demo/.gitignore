@@ -1,0 +1,38 @@
+### Gradle / Build ###
+.gradle/
+build/
+out/
+!gradle/wrapper/gradle-wrapper.jar
+
+### STS / Eclipse ###
+.apt_generated/
+.classpath
+.factorypath
+.project
+.settings/
+.springBeans
+.sts4-cache/
+bin/
+
+### IntelliJ IDEA ###
+.idea/
+*.iws
+*.iml
+*.ipr
+
+### VS Code ###
+.vscode/
+
+### Logs ###
+*.log
+logs/
+
+### Local DB (H2 등) ###
+*.mv.db
+*.h2.db
+*.trace.db
+
+### OS ###
+.DS_Store
+Thumbs.db
+EOF

@@ -3,6 +3,7 @@ package com.example.demo.service;
 import com.example.demo.dto.CommentDTO;
 import com.example.demo.entity.Comment;
 import com.example.demo.repository.CommentRepository;
+import com.example.demo.repository.FileRepository;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
